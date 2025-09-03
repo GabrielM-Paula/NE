@@ -1,0 +1,253 @@
+/* Variáveis CSS para consistência */
+:root {
+    --primary-blue: #2563eb;
+    --primary-purple: #8b5cf6;
+    --primary-dark: #1e293b;
+    --text-dark: #334155;
+    --text-light: #64748b;
+    --bg-light: #f8fafc;
+    --card-white: #ffffff;
+    --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+    --border-radius: 16px;
+}
+
+/* Reset e estilos base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    line-height: 1.6;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Container principal */
+.container {
+    max-width: 440px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* Logo */
+.logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 28px;
+}
+
+.logo-box {
+    background: linear-gradient(135deg, var(--primary-blue), #3b82f6);
+    color: white;
+    width: 70px;
+    height: 70px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 28px;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.logo-box:hover {
+    transform: rotate(5deg) scale(1.05);
+}
+
+/* Título - CORREÇÃO APLICADA */
+h1 {
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 16px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+h1 .blue {
+    color: var(--primary-blue);
+    position: relative;
+    display: inline-block;
+}
+
+h1 .blue::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-blue), var(--primary-purple));
+    border-radius: 2px;
+}
+
+/* Descrição */
+.description {
+    text-align: center;
+    font-size: 16px;
+    color: var(--text-light);
+    margin-bottom: 28px;
+    line-height: 1.6;
+    padding: 0 10px;
+}
+
+/* Botão */
+.button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    background: linear-gradient(135deg, var(--primary-blue), #3b82f6);
+    color: white;
+    text-align: center;
+    padding: 16px;
+    border-radius: 14px;
+    text-decoration: none;
+    font-weight: 600;
+    margin-bottom: 30px;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 20px -10px rgba(37, 99, 235, 0.4);
+    gap: 15px;
+}
+
+/* Cards */
+.card {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    transform-style: preserve-3d;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card .icon {
+    font-size: 26px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+/* Cards específicos */
+.card.purple {
+    background: linear-gradient(135deg, #a855f7, #c084fc);
+    color: white;
+}
+
+.card.purple .icon {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.card.blue {
+    background: linear-gradient(135deg, var(--primary-blue), #60a5fa);
+    color: white;
+}
+
+.card.blue .icon {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.card.white {
+    background-color: var(--card-white);
+    color: var(--text-dark);
+    border: 1px solid #e2e8f0;
+}
+
+.card.white .icon {
+    background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+    color: var(--primary-blue);
+}
+
+.card-content h2 {
+    font-size: 18px;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.card-content p {
+    font-size: 14px;
+    color: inherit;
+    opacity: 0.9;
+    line-height: 1.5;
+}
+
+/* Animações */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.logo-box, h1, .description, .button, .card {
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+.card:nth-child(1) { animation-delay: 0.1s; }
+.card:nth-child(2) { animation-delay: 0.2s; }
+.card:nth-child(3) { animation-delay: 0.3s; }
+
+/* Responsividade para telas maiores */
+@media (min-width: 768px) {
+    .container {
+        max-width: 500px;
+    }
+    
+    h1 {
+        font-size: 32px;
+    }
+    
+    .description {
+        font-size: 17px;
+    }
+    
+    .card {
+        padding: 24px;
+    }
+}
+
+/* Modo escuro (opcional) */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-light: #0f172a;
+        --text-dark: #e2e8f0;
+        --text-light: #94a3b8;
+        --card-white: #1e293b;
+    }
+    
+    body {
+        background-color: var(--bg-light);
+    }
+}
