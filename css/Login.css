@@ -1,0 +1,137 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  body {
+    background-color: #1D4ED8;
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .container {
+    width: 100%;
+    max-width: 450px;
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 30px;
+  }
+  
+  .logo {
+    text-align: center;
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #ffffff;
+  }
+  
+  .welcome {
+    text-align: center;
+    margin-bottom: 90px;
+    color: rgba(255, 255, 255, 0.9);
+  }
+  
+  .welcome h2 {
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+  }
+  
+  .welcome h4 {
+    font-size: 1.1rem;
+    font-weight: 400;
+  }
+ 
+  .form-group {
+    margin-bottom: 60px;
+   
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    padding: auto;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+    font-size: 1.1rem;
+  }
+  
+  .custom-input {
+    width: 100%;
+    padding: 16px 20px;
+    border-radius: 20px;
+    border: 2px solid #EBCBCB;
+    background-color: #EBCBCB;
+    color: #333;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+  }
+  
+  .custom-input:focus {
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+  }
+  
+  .custom-input::placeholder {
+    color: #888;
+  }
+  
+  .btn {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 8px;
+    background-color: white;
+    color: #1D4ED8;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 8px;
+  }
+  
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .btn:active {
+    transform: translateY(0);
+  }
+  
+  .login-link {
+    text-align: center;
+    margin-top: 25px;
+    color: rgba(255, 255, 255, 0.9);
+  }
+  
+  .login-link a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.3s;
+  }
+  
+  .login-link a:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+  }
+  
+    
+    .logo {
+      font-size: 2.5rem;
+    }
+    
+    .welcome h2 {
+      font-size: 1.5rem;
+    }
+    
+    .welcome h4 {
+      font-size: 1rem;
+    }
