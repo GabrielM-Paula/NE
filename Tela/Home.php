@@ -8,9 +8,12 @@
 <body>
     <div class="container">
         <!-- Logo -->
-        <div class="logo">
-            <div class="logo-box"><img src="01.png" alt=""></div>
-        </div>
+       <div class="logo">
+    <div class="logo-box">
+        <img src="../Tela/logo.png" alt="Logo NE" class="logo-img">
+    </div>
+</div>
+
 
         <!-- Título corrigido -->
         <h1>Sua ideia, <span class="blue">seu negócio</span></h1>

@@ -5,7 +5,7 @@
     --primary-dark: #1e293b;
     --text-dark: #334155;
     --text-light: #64748b;
-    --bg-light: #f8fafc;
+    --bg-light: #ffffff; /* fundo branco */
     --card-white: #ffffff;
     --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
     --transition: all 0.3s ease;
@@ -47,24 +47,28 @@ body {
 
 .logo-box {
     background: linear-gradient(135deg, var(--primary-blue), #3b82f6);
-    color: white;
     width: 70px;
     height: 70px;
     border-radius: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 800;
-    font-size: 28px;
     box-shadow: var(--shadow);
     transition: var(--transition);
+    overflow: hidden; /* garante que a imagem fique dentro */
 }
 
 .logo-box:hover {
     transform: rotate(5deg) scale(1.05);
 }
 
-/* Título - CORREÇÃO APLICADA */
+.logo-img {
+    width: 80%;
+    height: 80%;
+    object-fit: contain; /* mantém proporção da logo */
+}
+
+/* Título */
 h1 {
     font-size: 28px;
     text-align: center;
@@ -238,13 +242,13 @@ h1 .blue::after {
     }
 }
 
-/* Modo escuro (opcional) */
+/* Modo escuro (forçado branco) */
 @media (prefers-color-scheme: dark) {
     :root {
-        --bg-light: #0f172a;
-        --text-dark: #e2e8f0;
-        --text-light: #94a3b8;
-        --card-white: #1e293b;
+        --bg-light: #ffffff;
+        --text-dark: #1e293b;
+        --text-light: #64748b;
+        --card-white: #ffffff;
     }
     
     body {
