@@ -9,7 +9,7 @@
     <div class="container">
         <!-- Logo -->
         <div class="logo">
-            <div class="logo-box">NE</div>
+            <div class="logo-box"><img src="01.png" alt=""></div>
         </div>
 
         <!-- Título corrigido -->
