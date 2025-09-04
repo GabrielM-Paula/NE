@@ -10,7 +10,7 @@
   <div class="container">
     <center>
         <img src="../Tela/logo.png" alt="Logo NE" class="logo-img">
-    </cente>
+    </center>
     <div class="welcome">
       <h2>Bem-Vindo</h2>
       <h4>Faça login para continuar</h4>

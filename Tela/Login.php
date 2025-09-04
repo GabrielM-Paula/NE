@@ -8,7 +8,9 @@
 </head>
 <body>
   <div class="container">
-    <h1 class="logo">NE</h1>
+  <center>
+        <img src="../Tela/logo.png" alt="Logo NE" class="logo-img">
+  </center>
 
     <div class="welcome">
       <h2>Bem-Vindo</h2>
