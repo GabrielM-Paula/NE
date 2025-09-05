@@ -47,8 +47,8 @@ body {
 
 .logo-box {
     background: linear-gradient(135deg, var(--primary-blue), #3b82f6);
-    width: 70px;
-    height: 70px;
+    width: 100px;
+    height: 100px;
     border-radius: 18px;
     display: flex;
     align-items: center;
@@ -63,9 +63,9 @@ body {
 }
 
 .logo-img {
-    width: 80%;
-    height: 80%;
-    object-fit: contain; /* mantém proporção da logo */
+    width: 35vh;
+    height: 35vw;
+    /* object-fit: contain; mantém proporção da logo */
 }
 
 /* Título */

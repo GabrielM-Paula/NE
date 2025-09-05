@@ -24,7 +24,7 @@
         </p>
 
         <!-- Botão -->
-        <a href="#" class="button">Continuar →</a>
+        <a href="Login.php" class="button">Continuar →</a>
 
         <!-- Cards -->
         <div class="card purple">
