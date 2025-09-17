@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['user_email'] = $user['email'];
             
             // Redirecionar para a página principal
-            header("Location: dashboard.php");
+            header("Location: meusProjetos.php");
             exit();
         } else {
             $error = "E-mail ou senha incorretos.";
