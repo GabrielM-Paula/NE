@@ -3,14 +3,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NE - Sua ideia, seu negócio</title>
-    <link rel="stylesheet" href="../css/Home.css">
+    <link rel="stylesheet" href="../asstes/css/Home.css">
 </head>
 <body>
     <div class="container">
         <!-- Logo -->
        <div class="logo">
     <div class="logo-box">
-        <img src="../Tela/logo.png" alt="Logo NE" class="logo-img">
+        <img src="../assets/images/logo.png" alt="Logo NE" class="logo-img">
     </div>
 </div>
 
@@ -24,7 +24,7 @@
         </p>
 
         <!-- Botão -->
-        <a href="Login.php" class="button">Continuar →</a>
+        <a href="Cadastro.php" class="button">Continuar →</a>
 
         <!-- Cards -->
         <div class="card purple">

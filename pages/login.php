@@ -4,7 +4,6 @@ require_once '../includes/db_connection.php';
 
 $error = '';
 
-// Processar login tradicional
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = trim($_POST['email']);
     $password = $_POST['password'];
@@ -25,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['user_email'] = $user['email'];
             
             // Redirecionar para a página principal
-            header("Location: dashboard.php");
+            header("Location: meusProjetos.php");
             exit();
         } else {
             $error = "E-mail ou senha incorretos.";
@@ -33,24 +32,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// Login com Google
+// // Login com Google
+// $client_id = "315485308526-c6g22elcoge3eukt5b8bb42vf47gmsjc.apps.googleusercontent.com"; // substitua aqui
+// $redirect_uri = "http://localhost/Ne/Tela/dashboard.php";
+
+// $scope = "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email";
+
 // $auth_url = "https://accounts.google.com/o/oauth2/v2/auth?" . http_build_query([
-//   'client_id' => GOOGLE_CLIENT_ID,
-//   'redirect_uri' => GOOGLE_REDIRECT_URI,
+//   'client_id' => $client_id,
+//   'redirect_uri' => $redirect_uri,
 //   'response_type' => 'code',
-//   'scope' => 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
+//   'scope' => $scope,
 //   'access_type' => 'offline',
 //   'prompt' => 'consent'
 // ]);
 
-$page_title = "Login";
-require_once '../includes/header.php';
+
 ?>
 
-<div class="auth-container">
-  <div class="auth-form">
-    <h2>Bem-Vindo</h2>
-    <p>Faça login para continuar</p>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - NE</title>
+  <link rel="stylesheet" href="../assets/css/Login.css">
+  <style>
+    .error { color: red; margin-bottom: 15px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <center>
+      <a href="Home.php">
+        <img src="../assets/images/logo.png" alt="Logo NE" class="logo-img" >
+      </a>
+    </center>
+
+    <div class="welcome">
+      <h2>Bem-Vindo</h2>
+      <h4>Faça login para continuar</h4>
+    </div>
     
     <?php if (!empty($error)): ?>
       <div class="error"><?php echo $error; ?></div>
@@ -67,19 +89,14 @@ require_once '../includes/header.php';
         <input autocomplete="off" type="password" id="password" name="password" class="custom-input" placeholder="Digite sua senha" required>
       </div>
     
-      <button type="submit" class="btn btn-primary btn-full">ENTRAR</button>
+      <button type="submit" class="btn">ENTRAR</button>
     </form>
-
-    <div class="separator">ou</div>
     
-    <a href="<?= $auth_url ?>" class="btn btn-google btn-full">
-      <i class="fab fa-google"></i> Entrar com Google
-    </a>
-    
-    <div class="auth-link">
-      Não tem uma conta? <a href="cadastro.php">Cadastre-se</a>
+    <div class="login-link">
+      Não tem uma conta? <a href="Cadastro.php"> Cadastre-se</a>
+      <br>
+      Faça Login com o  <a href="<?= $auth_url ?>">Google</a>
     </div>
   </div>
-</div>
-
-<?php require_once '../includes/footer.php'; ?>
+</body>
+</html>

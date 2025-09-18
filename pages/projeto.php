@@ -1,194 +1,123 @@
 <?php
-require_once '../includes/auth_check.php';
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: Login.php");
+    exit();
+}
+
 require_once '../includes/db_connection.php';
 
-// Verificar se o ID do projeto foi passado
-if (!isset($_GET['id'])) {
-    header("Location: dashboard.php");
+$id_usuario = $_SESSION['user_id'];
+$id_ideia = $_GET['id'] ?? null;
+
+if (!$id_ideia) {
+    header("Location: meusProjetos.php");
     exit();
 }
 
-$id_ideia = $_GET['id'];
-
-// Buscar informações do projeto
-$stmt = $pdo->prepare("
-    SELECT i.*, u.nome as autor 
-    FROM Ideia i 
-    JOIN Usuario u ON i.id_usuario = u.id_usuario 
-    WHERE i.id_ideia = ? AND i.id_usuario = ?
-");
-$stmt->execute([$id_ideia, $user_id]);
-$projeto = $stmt->fetch();
+// Buscar dados do projeto
+$sql = "SELECT * FROM Ideia WHERE id_ideia = ? AND id_usuario = ?";
+$stmt = $pdo->prepare($sql);
+$stmt->execute([$id_ideia, $id_usuario]);
+$projeto = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$projeto) {
-    header("Location: dashboard.php");
+    echo "Projeto não encontrado!";
     exit();
 }
 
-// Buscar tarefas do projeto (se for modo guiado)
+// ---------------- GUIADO ----------------
 $tarefas = [];
-if ($projeto['modo_desenvolvimento'] == 'guiado') {
-    $stmt = $pdo->prepare("SELECT * FROM Tarefa WHERE id_ideia = ? ORDER BY data_criacao");
+$concluidas = [];
+$ferramentas = [];
+
+if ($projeto['modo_desenvolvimento'] === 'guiado') {
+    // Buscar tarefas
+    $sql = "SELECT * FROM Tarefa WHERE id_ideia = ?";
+    $stmt = $pdo->prepare($sql);
     $stmt->execute([$id_ideia]);
-    $tarefas = $stmt->fetchAll();
+    $tarefas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Separar concluídas
+    foreach ($tarefas as $t) {
+        if ($t['status'] === 'concluida') {
+            $concluidas[] = $t;
+        }
+    }
+
+    // Buscar ferramentas vinculadas (corrigido: alias não reservado)
+    $sql = "SELECT f.*
+            FROM Ferramenta f
+            JOIN Ideia_Ferramenta i_f ON f.id_ferramenta = i_f.id_ferramenta
+            WHERE i_f.id_ideia = ?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$id_ideia]);
+    $ferramentas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
-
-// Buscar ferramentas do projeto
-$stmt = $pdo->prepare("
-    SELECT f.* 
-    FROM Ferramenta f 
-    JOIN Ideia_Ferramenta if ON f.id_ferramenta = if.id_ferramenta 
-    WHERE if.id_ideia = ?
-");
-$stmt->execute([$id_ideia]);
-$ferramentas = $stmt->fetchAll();
-
-$page_title = $projeto['nome'];
-require_once '../includes/header.php';
 ?>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?= htmlspecialchars($projeto['nome']) ?> - Projeto</title>
+    <link rel="stylesheet" href="../assets/css/Projetos.css">
+    <style>
+        .card { border:1px solid #ddd; border-radius:10px; padding:14px; margin-bottom:10px; background:#fff; }
+        .titulo { font-weight:700; }
+        .status { padding:4px 10px; border-radius:6px; font-size:12px; }
+        .status.em_progresso { background:#2563EB; color:#fff; }
+        .status.concluido { background:#16a34a; color:#fff; }
+        .btn { display:inline-block; padding:10px 16px; border-radius:8px; background:#2563EB; color:#fff; font-weight:700; text-decoration:none; margin:8px 0; }
+    </style>
+</head>
+<body>
+<header class="topo">
+    <a href="meusProjetos.php" style="text-decoration:none;color:#111;">←</a>
+    <center><img src="../assets/images/neAzul.png" alt="Logo" class="logo" style="height:36px;"></center>
+    <div></div>
+</header>
 
-<div class="project-header">
-  <a href="dashboard.php" class="back-btn">
-    <i class="fas fa-arrow-left"></i> Voltar para Meus Projetos
-  </a>
-  <h1><?php echo htmlspecialchars($projeto['nome']); ?></h1>
-  <p class="project-date">Criado em <?php echo date('d/m/Y', strtotime($projeto['data_criacao'])); ?></p>
-  <span class="dev-mode-badge mode-<?php echo $projeto['modo_desenvolvimento']; ?>">
-    <?php echo $projeto['modo_desenvolvimento'] == 'guiado' ? 'Desenvolvimento Guiado' : 'Desenvolvimento Livre'; ?>
-  </span>
-</div>
+<main class="conteudo">
+    <h2><?= htmlspecialchars($projeto['nome']) ?></h2>
+    <p><?= htmlspecialchars($projeto['descricao']) ?></p>
+    <p><strong>Criado em:</strong> <?= date("d/m/Y", strtotime($projeto['data_criacao'])) ?></p>
+    <p><strong>Status:</strong> 
+        <span class="status <?= $projeto['progresso'] ?>">
+            <?= $projeto['progresso'] === "em_progresso" ? "Em andamento" : "Concluído" ?>
+        </span>
+    </p>
 
-<div class="divider"></div>
+    <?php if ($projeto['modo_desenvolvimento'] === 'guiado'): ?>
+        <h3>Tarefas</h3>
+        <?php if ($tarefas): ?>
+            <?php foreach ($tarefas as $t): ?>
+                <div class="card">
+                    <p class="titulo"><?= htmlspecialchars($t['titulo']) ?></p>
+                    <p>Status: <?= $t['status'] === 'concluida' ? "✅ Concluída" : "⏳ Em andamento" ?></p>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>Nenhuma tarefa cadastrada.</p>
+        <?php endif; ?>
 
-<section class="project-description">
-  <h2>Descrição</h2>
-  <p><?php echo nl2br(htmlspecialchars($projeto['descricao'])); ?></p>
-</section>
+        <h3>Ferramentas</h3>
+        <?php if ($ferramentas): ?>
+            <?php foreach ($ferramentas as $f): ?>
+                <div class="card">
+                    <p class="titulo"><?= htmlspecialchars($f['nome']) ?></p>
+                    <a style="width:30%;"href="ferramenta_<?= strtolower($f['nome']) ?>.php?id=<?= $id_ideia ?>" class="btn">Abrir</a>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>Nenhuma ferramenta vinculada.</p>
+        <?php endif; ?>
 
-<?php if ($projeto['modo_desenvolvimento'] == 'guiado'): ?>
-  <div class="stats-container">
-    <div class="stat-card">
-      <div class="stat-number"><?php echo count($tarefas); ?></div>
-      <div class="stat-label">Tarefas</div>
-    </div>
-    
-    <div class="stat-card">
-      <div class="stat-number">
-        <?php 
-          $concluidas = array_filter($tarefas, function($t) { return $t['concluida']; });
-          echo count($concluidas); 
-        ?>
-      </div>
-      <div class="stat-label">Concluídas</div>
-    </div>
-  </div>
-  
-  <div class="divider"></div>
-  
-  <section class="tasks-section">
-    <h2>Tarefas</h2>
-    <div class="tasks-list">
-      <?php foreach ($tarefas as $tarefa): ?>
-        <div class="task-item <?php echo $tarefa['concluida'] ? 'completed' : ''; ?>">
-          <label>
-            <input type="checkbox" <?php echo $tarefa['concluida'] ? 'checked' : ''; ?> disabled>
-            <span><?php echo htmlspecialchars($tarefa['descricao']); ?></span>
-          </label>
-          <?php if ($tarefa['concluida'] && $tarefa['data_conclusao']): ?>
-            <span class="task-date">Concluída em <?php echo date('d/m/Y', strtotime($tarefa['data_conclusao'])); ?></span>
-          <?php endif; ?>
-        </div>
-      <?php endforeach; ?>
-    </div>
-  </section>
-<?php endif; ?>
-
-<div class="divider"></div>
-
-<section class="tools-section">
-  <h2>Ferramentas</h2>
-  <div class="tools-grid">
-    <?php foreach ($ferramentas as $ferramenta): ?>
-      <div class="tool-card">
-        <h3><?php echo htmlspecialchars($ferramenta['nome']); ?></h3>
-        <p class="tool-description"><?php echo htmlspecialchars($ferramenta['descricao']); ?></p>
-        <a href="#" class="btn btn-secondary">Acessar Ferramenta</a>
-      </div>
-    <?php endforeach; ?>
-  </div>
-  
-  <a href="#" class="add-tool-btn" id="addToolBtn">
-    <i class="fas fa-plus"></i> Adicionar Ferramenta
-  </a>
-</section>
-
-<!-- Modal para adicionar ferramentas -->
-<div class="modal" id="toolsModal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h2>Adicionar Ferramentas</h2>
-      <button class="close-modal">&times;</button>
-    </div>
-    
-    <p>Selecione uma ferramenta para adicionar ao seu projeto:</p>
-    
-    <div class="tools-modal-grid">
-      <?php
-      // Buscar todas as ferramentas disponíveis
-      $stmt = $pdo->prepare("SELECT * FROM Ferramenta WHERE id_ferramenta NOT IN (
-          SELECT id_ferramenta FROM Ideia_Ferramenta WHERE id_ideia = ?
-      )");
-      $stmt->execute([$id_ideia]);
-      $ferramentas_disponiveis = $stmt->fetchAll();
-      
-      foreach ($ferramentas_disponiveis as $ferramenta):
-      ?>
-        <div class="modal-tool-card" data-tool-id="<?php echo $ferramenta['id_ferramenta']; ?>">
-          <h3><?php echo htmlspecialchars($ferramenta['nome']); ?></h3>
-          <p><?php echo htmlspecialchars($ferramenta['descricao']); ?></p>
-        </div>
-      <?php endforeach; ?>
-    </div>
-  </div>
-</div>
-
-<script>
-// JavaScript para o modal de ferramentas
-document.getElementById('addToolBtn').addEventListener('click', function(e) {
-  e.preventDefault();
-  document.getElementById('toolsModal').style.display = 'flex';
-});
-
-document.querySelector('.close-modal').addEventListener('click', function() {
-  document.getElementById('toolsModal').style.display = 'none';
-});
-
-// Adicionar ferramenta ao projeto
-document.querySelectorAll('.modal-tool-card').forEach(card => {
-  card.addEventListener('click', function() {
-    const toolId = this.getAttribute('data-tool-id');
-    
-    // Enviar requisição AJAX para adicionar ferramenta
-    fetch('adicionar_ferramenta.php', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: `id_ideia=<?php echo $id_ideia; ?>&id_ferramenta=${toolId}`
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        location.reload();
-      } else {
-        alert('Erro ao adicionar ferramenta: ' + data.message);
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
-  });
-});
-</script>
-
-<?php require_once '../includes/footer.php'; ?>
+    <?php else: ?>
+        <h3>Ferramentas</h3>
+        <p>Este projeto está em modo livre.</p>
+        <a href="projeto_add_ferramenta.php?id=<?= $id_ideia ?>" class="btn">+ Adicionar Ferramenta</a>
+    <?php endif; ?>
+</main>
+</body>
+</html>
