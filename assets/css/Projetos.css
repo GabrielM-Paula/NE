@@ -69,8 +69,8 @@
             z-index: 2;
             margin-bottom: 20px;
             transition: background-color 0.2s;
-            
         }
+
         .btn:hover {
             background: #1d4ed8;
         }
@@ -121,12 +121,12 @@
             white-space: nowrap;
         }
 
-        .status.em_andamento {
+        .status.em_progresso{
             background: #DBEAFE;
             color: #1E40AF;
         }
 
-        .status.concluido {
+        .status.concluida {
             background: #D1FAE5;
             color: #065F46;
         }

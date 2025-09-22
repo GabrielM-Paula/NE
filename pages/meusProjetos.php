@@ -22,6 +22,9 @@ $ideias = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meus Projetos - NE</title>
     <link rel="stylesheet" href="../assets/css/Projetos.css">
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+    <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+    
 </head>
 <body>
    <!-- Header -->
@@ -50,7 +53,7 @@ $ideias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <!-- Botão Novo Projeto -->
     <form action="novo.php" method="get" style="margin:0 0 18px 0;">
-      <button type="submit" class="btn" id="novoBtn">+Novo Projeto</button>
+      <button type="submit" class="btn" id="novoBtn">+ Novo Projeto</button>
     </form>
 
     <!-- Projetos Recentes -->
