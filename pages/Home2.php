@@ -3,7 +3,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NE - Sua ideia, seu negócio</title>
-    <link rel="stylesheet" href="../asstes/css/Home.css">
+    <link rel="stylesheet" href="../assets/css/Home.css">
+    
 </head>
 <body>
     <div class="container">

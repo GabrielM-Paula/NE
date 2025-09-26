@@ -24,7 +24,6 @@ $ideias = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="../assets/css/Projetos.css">
     <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
     <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
-    
 </head>
 <body>
    <!-- Header -->
@@ -59,68 +58,46 @@ $ideias = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <!-- Projetos Recentes -->
     <h3>Projetos Recentes</h3>
     <div class="lista">
-      <!-- Exemplo 1 -->
-      <div class="card">
-        <div>
-          <p class="titulo">Projeto 1</p>
-          <p class="data">10 de Agosto</p>
-        </div>
-        <span class="status em_progresso">Em andamento</span>
-        <div class="seta">›</div>
-      </div>
-
-      <!-- Exemplo 2 -->
-      <div class="card">
-        <div>
-          <p class="titulo">Projeto 1</p>
-          <p class="data">10 de Agosto</p>
-        </div>
-        <span class="status concluida">Concluído</span>
-        <div class="seta">›</div>
-      </div>
-
-      <!-- Exemplo 3 -->
-      <div class="card" style="border: 2px solid #38BDF8;">
-        <div>
-          <p class="titulo">Projeto 1</p>
-          <p class="data">10 de Agosto</p>
-        </div>
-        <span class="status concluida">Concluído</span>
-        <div class="seta">›</div>
-      </div>
+      <?php if (empty($ideias)): ?>
+        <p>Você ainda não criou nenhum projeto.</p>
+      <?php else: ?>
+        <?php foreach ($ideias as $ideia): ?>
+          <a href="Descricao.php?id=<?= $ideia['id_ideia'] ?>" style="text-decoration:none; color:inherit;">
+            <div class="card">
+              <div>
+                <p class="titulo"><?= htmlspecialchars($ideia['nome']) ?></p>
+                <p class="data">
+                  <?= date("d/m/Y", strtotime($ideia['data_criacao'])) ?>
+                </p>
+              </div>
+              <span class="status em_progresso">Em andamento</span>
+              <div class="seta">›</div>
+            </div>
+          </a>
+        <?php endforeach; ?>
+      <?php endif; ?>
     </div>
   </main>
 
+  <script>
+      // Modal JS
+      var modal = document.getElementById("myModal");
+      var btn = document.getElementById("openModal");
+      var span = document.getElementsByClassName("close")[0];
 
-    <script>
-        // Modal JS
-        var modal = document.getElementById("myModal");
-        var btn = document.getElementById("openModal");
-        var span = document.getElementsByClassName("close")[0];
+      btn.onclick = function() {
+          modal.style.display = "block";
+      }
 
-        btn.onclick = function() {
-            modal.style.display = "block";
-        }
+      span.onclick = function() {
+          modal.style.display = "none";
+      }
 
-        span.onclick = function() {
-            modal.style.display = "none";
-        }
-
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-
-        // Botão novo projeto
-        document.addEventListener('DOMContentLoaded', function(){
-            var btnNovo = document.getElementById('novoBtn');
-            if(btnNovo){
-                btnNovo.addEventListener('click', function(e){
-                    // comportamento padrão do form já envia para novo.php
-                });
-            }
-        });
-    </script>
+      window.onclick = function(event) {
+          if (event.target == modal) {
+              modal.style.display = "none";
+          }
+      }
+  </script>
 </body>
 </html>

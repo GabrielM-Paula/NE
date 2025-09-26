@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                          SELECT $id_ideia, id_ferramenta FROM Ferramenta");
         }
 
-        header("Location: projeto.php?id=" . $id_ideia);
+        header("Location: Descricao.php?id=" . $id_ideia);
         exit();
     }
 }
