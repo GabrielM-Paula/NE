@@ -55,8 +55,41 @@ $ideias = $stmt->fetchAll(PDO::FETCH_ASSOC);
       <button type="submit" class="btn" id="novoBtn">+ Novo Projeto</button>
     </form>
 
-    <!-- Projetos Recentes -->
-    <h3>Projetos Recentes</h3>
+    <!-- Importa os ícones do Phosphor -->
+    <script src="https://unpkg.com/phosphor-icons"></script>
+
+    <!-- Cabeçalho de Projetos Recentes com botão de filtro -->
+    <div class="header-filtro">
+      <h3>Projetos Recentes</h3>
+      <button id="filtroBtn" class="filtro-icone" title="Filtrar projetos">
+        <i class="ph ph-funnel-simple"></i>
+      </button>
+    </div>
+
+    <!-- Painel de Filtro -->
+    <div id="painelFiltro" class="painel-filtro">
+      <h4>Filtros</h4>
+
+      <label>Status</label>
+      <div class="opcoes">
+        <button class="opcao">Em andamento</button>
+        <button class="opcao ativo">Concluído ✓</button>
+      </div>
+
+      <label>Data</label>
+      <div class="opcoes">
+        <button class="opcao">↓ Mais Recente</button>
+        <button class="opcao ativo">↑ Mais Antigo ✓</button>
+      </div>
+
+      <div class="acoes-filtro">
+        <button class="limpar">Limpar Filtros</button>
+        <button class="aplicar">Aplicar</button>
+      </div>
+    </div>
+    <br>
+
+    <!-- Lista de Projetos -->
     <div class="lista">
       <?php if (empty($ideias)): ?>
         <p>Você ainda não criou nenhum projeto.</p>
@@ -66,9 +99,10 @@ $ideias = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="card">
               <div>
                 <p class="titulo"><?= htmlspecialchars($ideia['nome']) ?></p>
-                <p class="data">
-                  <?= date("d/m/Y", strtotime($ideia['data_criacao'])) ?>
-                </p>
+                <div class="data-linha">
+                  <p class="data"><?= date("d/m/Y", strtotime($ideia['data_criacao'])) ?></p>
+                  <i class="ph ph-trash lixo"></i>
+                </div>
               </div>
               <span class="status em_progresso">Em andamento</span>
               <div class="seta">›</div>
@@ -79,8 +113,9 @@ $ideias = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
   </main>
 
+  <!-- Script do filtro -->
   <script>
-      // Modal JS
+       // Modal JS
       var modal = document.getElementById("myModal");
       var btn = document.getElementById("openModal");
       var span = document.getElementsByClassName("close")[0];
@@ -98,6 +133,14 @@ $ideias = $stmt->fetchAll(PDO::FETCH_ASSOC);
               modal.style.display = "none";
           }
       }
+      
+    const filtroBtn = document.getElementById("filtroBtn");
+    const painelFiltro = document.getElementById("painelFiltro");
+
+    filtroBtn.addEventListener("click", () => {
+      painelFiltro.style.display =
+        painelFiltro.style.display === "flex" ? "none" : "flex";
+    });
   </script>
 </body>
 </html>
