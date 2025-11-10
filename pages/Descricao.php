@@ -113,6 +113,11 @@ if (!$ideia) {
     <button class="add-btn">
       <i class="fas fa-plus"></i>
     </button>
+
+ <!-- Botão Excluir Projeto -->
+    <button class="del-btn">
+    <i class="fa-solid fa-trash"></i>
+    </button>
   </div>
 
   <script>
