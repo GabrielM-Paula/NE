@@ -101,7 +101,7 @@ $ideias = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <p class="titulo"><?= htmlspecialchars($ideia['nome']) ?></p>
                 <div class="data-linha">
                   <p class="data"><?= date("d/m/Y", strtotime($ideia['data_criacao'])) ?></p>
-                  <i class="ph ph-trash lixo"></i>
+                
                 </div>
               </div>
               <span class="status em_progresso">Em andamento</span>
