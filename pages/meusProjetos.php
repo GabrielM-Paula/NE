@@ -72,14 +72,14 @@ $ideias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
       <label>Status</label>
       <div class="opcoes">
-        <button class="opcao">Em andamento</button>
-        <button class="opcao ativo">Concluído ✓</button>
+        <button class="opcao" id="filtro-andamento" value="false">Em andamento</button>
+        <button class="opcao ativo" id="filtro-concluido">Concluído</button>
       </div>
 
       <label>Data</label>
       <div class="opcoes">
-        <button class="opcao">↓ Mais Recente</button>
-        <button class="opcao ativo">↑ Mais Antigo ✓</button>
+        <button class="opcao" id="filtro-recente">↓ Mais Recente</button>
+        <button class="opcao" id="filtro-antigo">↑ Mais Antigo </button>
       </div>
 
       <div class="acoes-filtro">
@@ -134,6 +134,8 @@ $ideias = $stmt->fetchAll(PDO::FETCH_ASSOC);
           }
       }
       
+
+    // FILTRO  
     const filtroBtn = document.getElementById("filtroBtn");
     const painelFiltro = document.getElementById("painelFiltro");
 
@@ -141,6 +143,75 @@ $ideias = $stmt->fetchAll(PDO::FETCH_ASSOC);
       painelFiltro.style.display =
         painelFiltro.style.display === "flex" ? "none" : "flex";
     });
-  </script>
+
+    const filtroAndamento = document.getElementById("filtro-andamento");
+  const filtroConcluido = document.getElementById("filtro-concluido");
+  const filtroRecente = document.getElementById("filtro-recente");
+  const filtroAntigo = document.getElementById("filtro-antigo");
+  const limparBtn = document.querySelector(".limpar");
+  const aplicarBtn = document.querySelector(".aplicar");
+
+  const lista = document.querySelectorAll(".lista .card");
+
+  // Função para filtrar
+  function aplicarFiltros() {
+      let statusFiltro = null;
+      if (filtroAndamento.classList.contains("ativo")) statusFiltro = "Em andamento";
+      if (filtroConcluido.classList.contains("ativo")) statusFiltro = "Concluído";
+
+      let ordem = "desc"; // padrão
+      if (filtroRecente.classList.contains("ativo")) ordem = "desc";
+      if (filtroAntigo.classList.contains("ativo")) ordem = "asc";
+
+      // Converter NodeList para array para ordenar
+      let cardsArray = Array.from(lista);
+
+      // Filtrar por status
+      cardsArray.forEach(card => {
+          const status = card.querySelector(".status").innerText;
+          if (statusFiltro && status !== statusFiltro) {
+              card.style.display = "none";
+          } else {
+              card.style.display = "flex";
+          }
+      });
+
+      // Ordenar por data
+      cardsArray.sort((a, b) => {
+          const dataA = new Date(a.querySelector(".data").innerText.split("/").reverse().join("-"));
+          const dataB = new Date(b.querySelector(".data").innerText.split("/").reverse().join("-"));
+          return ordem === "desc" ? dataB - dataA : dataA - dataB;
+      });
+
+      // Reposicionar no DOM
+      const listaContainer = document.querySelector(".lista");
+      cardsArray.forEach(card => listaContainer.appendChild(card));
+  }
+
+  // Marcar botão ativo ao clicar
+  document.querySelectorAll(".opcoes .opcao").forEach(btn => {
+    btn.addEventListener("click", () => {
+      // Para status, apenas um ativo por grupo
+      if (btn.parentElement.querySelectorAll(".opcao").length === 2) {
+        btn.parentElement.querySelectorAll(".opcao").forEach(b => b.classList.remove("ativo"));
+        btn.classList.add("ativo");
+      } else { // Para data, só um ativo
+        btn.parentElement.querySelectorAll(".opcao").forEach(b => b.classList.remove("ativo"));
+        btn.classList.add("ativo");
+      }
+    });
+  });
+
+  // Limpar filtros
+  limparBtn.addEventListener("click", () => {
+      document.querySelectorAll(".opcoes .opcao").forEach(b => b.classList.remove("ativo"));
+      lista.forEach(card => card.style.display = "flex");
+  });
+
+  // Aplicar filtros
+  aplicarBtn.addEventListener("click", aplicarFiltros);
+
+
+</script>
 </body>
 </html>
