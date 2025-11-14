@@ -36,93 +36,109 @@ if (!$ideia) {
   <link rel="stylesheet" href="../assets/css/Descricao.css">
 </head>
 <body>
-  <div class="container">
-    <!-- Topo -->
+   <div class="container">
+
+    <!-- TOPO -->
     <div class="header">
-      <div class="back-btn">
-        <a href="meusProjetos.php"><i class="fas fa-arrow-left"></i></a>
-      </div>
-      <div class="logo">
-        <div class="logo-placeholder">NE</div>
-      </div>
+        <div class="back-btn">
+            <a href="meusProjetos.php"><i class="fas fa-arrow-left"></i></a>
+        </div>
+        <div class="logo">
+            <div class="logo-placeholder">NE</div>
+        </div>
     </div>
 
-    <!-- Título + status -->
-<div class="status">
-  <h2>
-    <span id="projectName"><?= htmlspecialchars($ideia['nome']) ?></span>
-    <i class="fas fa-pen" id="editar"></i>
-  </h2>
-  <span class="tag">Em andamento</span>
-</div>
-
-<!-- Data -->
-<div class="date">
-  <i class="far fa-calendar"></i>
-  <span>Criado em <?= date("d/m/Y H:i", strtotime($ideia['tempo_hora'])) ?></span>
-</div>
-
-<!-- Card Descrição -->
-<div class="card">
-  <h3><i class="fas fa-align-left"></i> Descrição</h3>
-  <textarea id="projectDesc" readonly><?= htmlspecialchars($ideia['descricao']) ?></textarea>
-
-  <!-- Botões aparecem só no modo edição -->
-  <div class="edit-buttons" id="editButtons" style="display: none;">
-    <button class="save" id="saveBtn">Salvar</button>
-    <button class="cancel" id="cancelBtn">Cancelar</button>
-  </div>
-</div>
-
-    <!-- Ferramentas (mantive como estava, pode puxar do banco também se quiser) -->
-    <div>
-      <div class="section-title">Ferramentas</div>
-
-      <div class="tool canva">
-        <div class="info">
-          <div class="tool-icon">
-            <i class="fas fa-palette"></i>
-          </div>
-          <div class="tool-text">
-            <h4>Canva</h4>
-            <span>Criar designs</span>
-          </div>
-        </div>
-        <div class="tool-arrow">
-          <i class="fas fa-chevron-right"></i>
-        </div>
-      </div>
-
-      <div class="tool pitch">
-        <div class="info">
-          <div class="tool-icon">
-            <i class="fas fa-chalkboard"></i>
-          </div>
-          <div class="tool-text">
-            <h4>Pitch</h4>
-            <span>Apresentações</span>
-          </div>
-        </div>
-        <div class="tool-arrow">
-          <i class="fas fa-chevron-right"></i>
-        </div>
-      </div>
+    <!-- STATUS ORIGINAL -->
+    <div class="status">
+        <h2>
+            <span id="projectName"><?= htmlspecialchars($ideia['nome']) ?></span>
+            <i class="fas fa-pen" id="editar"></i>
+        </h2>
+        <span class="tag">Em andamento</span>
     </div>
 
-    <!-- Botão adicionar -->
-    <button class="add-btn">
-      <i class="fas fa-plus"></i>
-    </button>
+    <!-- DATA -->
+    <div class="date">
+        <i class="far fa-calendar"></i>
+        <span>Criado em <?= date("d/m/Y H:i", strtotime($ideia['tempo_hora'])) ?></span>
+    </div>
 
- <!-- Botão Excluir Projeto -->
-    <form action="deleteProjeto.php" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir este projeto?')">
-    <input type="hidden" name="id" value="<?= $id_ideia ?>">
-    <button class="del-btn" type="submit">
-        <i class="fa-solid fa-trash"></i>
-    </button>
-</form>
+    <!-- 🔥 NOVO STATUS CENTRAL (AGORA AQUI ENTRE DATA E DESCRIÇÃO) -->
+    <div class="status-center">
+        <button class="status-btn" id="statusToggle">
+            Alterar Status <i class="fas fa-chevron-down"></i>
+        </button>
 
-  <script>
+        <div class="dropdown" id="dropdownMenu">
+            <span class="opt" data-value="Em andamento">Em andamento</span>
+            <span class="opt" data-value="Concluído">Concluído</span>
+        </div>
+    </div>
+
+    <!-- CARD -->
+    <div class="card">
+        <h3><i class="fas fa-align-left"></i> Descrição</h3>
+        <textarea id="projectDesc" readonly><?= htmlspecialchars($ideia['descricao']) ?></textarea>
+
+        <div class="edit-buttons" id="editButtons" style="display:none;">
+            <button class="save" id="saveBtn">Salvar</button>
+            <button class="cancel" id="cancelBtn">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- TOOLS -->
+    <div class="tool">
+        <div class="info">
+            <div class="tool-icon"><i class="fas fa-palette"></i></div>
+            <div><h4>Canva</h4></div>
+        </div>
+        <i class="fas fa-chevron-right"></i>
+    </div>
+
+    <div class="tool">
+        <div class="info">
+            <div class="tool-icon"><i class="fas fa-chalkboard"></i></div>
+            <div><h4>Pitch</h4></div>
+        </div>
+        <i class="fas fa-chevron-right"></i>
+    </div>
+
+    <!-- ADD -->
+    <button class="add-btn"><i class="fas fa-plus"></i></button>
+
+    <!-- DELETE -->
+    <form action="deleteProjeto.php" method="POST">
+        <input type="hidden" name="id" value="<?= $id_ideia ?>">
+        <button class="del-btn"><i class="fas fa-trash"></i></button>
+    </form>
+
+</div>
+
+
+<script>
+
+// ===== DROPDOWN CENTRAL =====
+const toggle = document.getElementById("statusToggle");
+const menu = document.getElementById("dropdownMenu");
+
+toggle.addEventListener("click", () => {
+    menu.classList.toggle("show");
+});
+
+document.querySelectorAll(".opt").forEach(opt => {
+    opt.addEventListener("click", () => {
+        toggle.innerHTML = opt.innerText + " <i class='fas fa-chevron-down'></i>";
+        menu.classList.remove("show");
+    });
+});
+
+// Fecha clicando fora
+document.addEventListener("click", (e) => {
+    if (!toggle.contains(e.target) && !menu.contains(e.target)) {
+        menu.classList.remove("show");
+    }
+});
+
   const editBtn = document.getElementById("editar");
   const nameSpan = document.getElementById("projectName");
   const descArea = document.getElementById("projectDesc");

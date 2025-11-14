@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 26-Set-2025 às 08:09
+-- Tempo de geração: 14-Nov-2025 às 19:20
 -- Versão do servidor: 10.4.32-MariaDB
 -- versão do PHP: 8.2.12
 
@@ -58,10 +58,25 @@ CREATE TABLE `ideia` (
   `id_usuario` int(11) DEFAULT NULL,
   `nome` varchar(150) NOT NULL,
   `descricao` text DEFAULT NULL,
-  `data_criacao` date NOT NULL,
+  `tempo_hora` datetime NOT NULL DEFAULT current_timestamp(),
   `progresso` enum('em_progresso','concluida') DEFAULT 'em_progresso',
   `modo_desenvolvimento` enum('guiado','livre') DEFAULT 'guiado'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Extraindo dados da tabela `ideia`
+--
+
+INSERT INTO `ideia` (`id_ideia`, `id_usuario`, `nome`, `descricao`, `tempo_hora`, `progresso`, `modo_desenvolvimento`) VALUES
+(10, 3, 'Novo Projeto', 'Meu Primeiro Projeto', '2025-11-14 13:49:01', 'em_progresso', 'guiado'),
+(11, 4, 'Projeto1', 'progeto1', '2025-11-14 13:49:01', 'em_progresso', 'guiado'),
+(12, 4, 'Projeto2', 'projeto2', '2025-11-14 13:49:01', 'em_progresso', 'guiado'),
+(13, 4, 'Projeto3', 'projeto3', '2025-11-14 13:49:01', 'em_progresso', 'guiado'),
+(16, 5, 'b', 'b', '2025-11-14 13:49:01', 'em_progresso', 'guiado'),
+(17, 5, 'b', 'b', '2025-11-14 17:50:14', 'em_progresso', 'guiado'),
+(18, 5, 'p', 'p', '2025-11-14 17:51:40', 'em_progresso', 'guiado'),
+(19, 5, 'k', 'k', '2025-11-14 17:57:33', 'em_progresso', 'guiado'),
+(21, 5, 'i', 'i', '2025-11-14 14:06:54', 'em_progresso', 'guiado');
 
 -- --------------------------------------------------------
 
@@ -73,6 +88,66 @@ CREATE TABLE `ideia_ferramenta` (
   `id_ideia` int(11) NOT NULL,
   `id_ferramenta` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Extraindo dados da tabela `ideia_ferramenta`
+--
+
+INSERT INTO `ideia_ferramenta` (`id_ideia`, `id_ferramenta`) VALUES
+(10, 1),
+(10, 2),
+(10, 3),
+(10, 4),
+(10, 5),
+(10, 6),
+(11, 1),
+(11, 2),
+(11, 3),
+(11, 4),
+(11, 5),
+(11, 6),
+(12, 1),
+(12, 2),
+(12, 3),
+(12, 4),
+(12, 5),
+(12, 6),
+(13, 1),
+(13, 2),
+(13, 3),
+(13, 4),
+(13, 5),
+(13, 6),
+(16, 1),
+(16, 2),
+(16, 3),
+(16, 4),
+(16, 5),
+(16, 6),
+(17, 1),
+(17, 2),
+(17, 3),
+(17, 4),
+(17, 5),
+(17, 6),
+(18, 1),
+(18, 2),
+(18, 3),
+(18, 4),
+(18, 5),
+(18, 6),
+(19, 1),
+(19, 2),
+(19, 3),
+(19, 4),
+(19, 5),
+(19, 6),
+(21, 1),
+(21, 2),
+(21, 3),
+(21, 4),
+(21, 5),
+(21, 6);
 
 -- --------------------------------------------------------
 
@@ -134,7 +209,9 @@ CREATE TABLE `usuario` (
 INSERT INTO `usuario` (`id_usuario`, `nome`, `email`, `senha`, `data_criacao`) VALUES
 (1, 'Nome', 'nome@gmail.com', '$2y$10$/jLaSjrZ6I7YcNz.mAMloeIER9i7cLmCrlD5mxuZLRSCn4n623B3q', '2025-09-18 00:11:25'),
 (2, 'c', 'c@gmail.com', '$2y$10$YtLOT/w1sb1UdxXUyoYXQur.6q83rbTFD8T9euZNqQQHCloQmC6nG', '2025-09-18 00:12:56'),
-(3, 'nome', 'nome1@gmail.com', '$2y$10$DbRIdRsaRg.zE8AJovwmku9CEE9a4CEHW2OapavqE1AOLxbfqLB/u', '2025-09-26 05:18:13');
+(3, 'nome', 'nome1@gmail.com', '$2y$10$DbRIdRsaRg.zE8AJovwmku9CEE9a4CEHW2OapavqE1AOLxbfqLB/u', '2025-09-26 05:18:13'),
+(4, 'abcdario', 'abcdario@gmail.com', '$2y$10$q6fTvBxQSfrvdvc1bT5chOBZcoR3VI472Xrnmwjb8vSZ8SxWiqDq.', '2025-10-02 23:08:10'),
+(5, 'as', 'as@gmail.com', '$2y$10$LM3bVDySIWGcwT7krM4JFul5vqL1231.9aeVC3vxs7xqlATYCgavm', '2025-11-14 16:39:15');
 
 --
 -- Índices para tabelas despejadas
@@ -195,7 +272,7 @@ ALTER TABLE `ferramenta`
 -- AUTO_INCREMENT de tabela `ideia`
 --
 ALTER TABLE `ideia`
-  MODIFY `id_ideia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_ideia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT de tabela `tarefa`
@@ -213,7 +290,7 @@ ALTER TABLE `template`
 -- AUTO_INCREMENT de tabela `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Restrições para despejos de tabelas
