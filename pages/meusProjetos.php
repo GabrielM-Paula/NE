@@ -10,7 +10,7 @@ require_once '../includes/db_connection.php';
 $id_usuario = $_SESSION['user_id'];
 
 // Buscar ideias do usuário
-$sql = "SELECT * FROM Ideia WHERE id_usuario = ? ORDER BY data_criacao DESC";
+$sql = "SELECT * FROM Ideia WHERE id_usuario = ? ORDER BY tempo_hora DESC";
 $stmt = $pdo->prepare($sql);
 $stmt->execute([$id_usuario]);
 $ideias = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -73,7 +73,7 @@ $ideias = $stmt->fetchAll(PDO::FETCH_ASSOC);
       <label>Status</label>
       <div class="opcoes">
         <button class="opcao" id="filtro-andamento" value="false">Em andamento</button>
-        <button class="opcao ativo" id="filtro-concluido">Concluído</button>
+        <button class="opcao" id="filtro-concluido">Concluído</button>
       </div>
 
       <label>Data</label>
@@ -100,7 +100,7 @@ $ideias = $stmt->fetchAll(PDO::FETCH_ASSOC);
               <div>
                 <p class="titulo"><?= htmlspecialchars($ideia['nome']) ?></p>
                 <div class="data-linha">
-                  <p class="data"><?= date("d/m/Y", strtotime($ideia['data_criacao'])) ?></p>
+                  <p class="data"><?= date("d/m/Y H:i", strtotime($ideia['tempo_hora'])) ?></p>
                 
                 </div>
               </div>
@@ -115,103 +115,101 @@ $ideias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
   <!-- Script do filtro -->
   <script>
-       // Modal JS
-      var modal = document.getElementById("myModal");
-      var btn = document.getElementById("openModal");
-      var span = document.getElementsByClassName("close")[0];
+/* ===========================
+      MODAL DO MENU
+=========================== */
+var modal = document.getElementById("myModal");
+var btn = document.getElementById("openModal");
+var span = document.getElementsByClassName("close")[0];
 
-      btn.onclick = function() {
-          modal.style.display = "block";
-      }
+btn.onclick = function () {
+  modal.style.display = "block";
+};
 
-      span.onclick = function() {
-          modal.style.display = "none";
-      }
+span.onclick = function () {
+  modal.style.display = "none";
+};
 
-      window.onclick = function(event) {
-          if (event.target == modal) {
-              modal.style.display = "none";
-          }
-      }
-      
-
-    // FILTRO  
-    const filtroBtn = document.getElementById("filtroBtn");
-    const painelFiltro = document.getElementById("painelFiltro");
-
-    filtroBtn.addEventListener("click", () => {
-      painelFiltro.style.display =
-        painelFiltro.style.display === "flex" ? "none" : "flex";
-    });
-
-    const filtroAndamento = document.getElementById("filtro-andamento");
-  const filtroConcluido = document.getElementById("filtro-concluido");
-  const filtroRecente = document.getElementById("filtro-recente");
-  const filtroAntigo = document.getElementById("filtro-antigo");
-  const limparBtn = document.querySelector(".limpar");
-  const aplicarBtn = document.querySelector(".aplicar");
-
-  const lista = document.querySelectorAll(".lista .card");
-
-  // Função para filtrar
-  function aplicarFiltros() {
-      let statusFiltro = null;
-      if (filtroAndamento.classList.contains("ativo")) statusFiltro = "Em andamento";
-      if (filtroConcluido.classList.contains("ativo")) statusFiltro = "Concluído";
-
-      let ordem = "desc"; // padrão
-      if (filtroRecente.classList.contains("ativo")) ordem = "desc";
-      if (filtroAntigo.classList.contains("ativo")) ordem = "asc";
-
-      // Converter NodeList para array para ordenar
-      let cardsArray = Array.from(lista);
-
-      // Filtrar por status
-      cardsArray.forEach(card => {
-          const status = card.querySelector(".status").innerText;
-          if (statusFiltro && status !== statusFiltro) {
-              card.style.display = "none";
-          } else {
-              card.style.display = "flex";
-          }
-      });
-
-      // Ordenar por data
-      cardsArray.sort((a, b) => {
-          const dataA = new Date(a.querySelector(".data").innerText.split("/").reverse().join("-"));
-          const dataB = new Date(b.querySelector(".data").innerText.split("/").reverse().join("-"));
-          return ordem === "desc" ? dataB - dataA : dataA - dataB;
-      });
-
-      // Reposicionar no DOM
-      const listaContainer = document.querySelector(".lista");
-      cardsArray.forEach(card => listaContainer.appendChild(card));
+window.onclick = function (event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
   }
+};
 
-  // Marcar botão ativo ao clicar
-  document.querySelectorAll(".opcoes .opcao").forEach(btn => {
-    btn.addEventListener("click", () => {
-      // Para status, apenas um ativo por grupo
-      if (btn.parentElement.querySelectorAll(".opcao").length === 2) {
-        btn.parentElement.querySelectorAll(".opcao").forEach(b => b.classList.remove("ativo"));
-        btn.classList.add("ativo");
-      } else { // Para data, só um ativo
-        btn.parentElement.querySelectorAll(".opcao").forEach(b => b.classList.remove("ativo"));
-        btn.classList.add("ativo");
-      }
-    });
+
+/* ===========================
+      FILTRO
+=========================== */
+
+const filtroBtn = document.getElementById("filtroBtn");
+const painelFiltro = document.getElementById("painelFiltro");
+
+filtroBtn.addEventListener("click", () => {
+  painelFiltro.style.display =
+    painelFiltro.style.display === "flex" ? "none" : "flex";
+});
+
+const filtroAndamento = document.getElementById("filtro-andamento");
+const filtroConcluido = document.getElementById("filtro-concluido");
+const filtroRecente = document.getElementById("filtro-recente");
+const filtroAntigo = document.getElementById("filtro-antigo");
+const limparBtn = document.querySelector(".limpar");
+const aplicarBtn = document.querySelector(".aplicar");
+
+// IMPORTANTE: seleciona o <a> que contém o card
+const lista = Array.from(document.querySelectorAll(".lista a"));
+
+function aplicarFiltros() {
+  let statusFiltro = null;
+  if (filtroAndamento.classList.contains("ativo")) statusFiltro = "Em andamento";
+  if (filtroConcluido.classList.contains("ativo")) statusFiltro = "Concluído";
+
+  let ordem = "desc"; // padrão
+  if (filtroRecente.classList.contains("ativo")) ordem = "desc";
+  if (filtroAntigo.classList.contains("ativo")) ordem = "asc";
+
+  // Filtrar por status
+  lista.forEach(link => {
+    const status = link.querySelector(".status").innerText;
+    if (statusFiltro && status !== statusFiltro) {
+      link.style.display = "none";
+    } else {
+      link.style.display = "block";
+    }
   });
 
-  // Limpar filtros
-  limparBtn.addEventListener("click", () => {
-      document.querySelectorAll(".opcoes .opcao").forEach(b => b.classList.remove("ativo"));
-      lista.forEach(card => card.style.display = "flex");
+  // Ordenar por data
+  const ordenados = [...lista].sort((a, b) => {
+    const dataA = new Date(a.querySelector(".data").innerText.split("/").reverse().join("-"));
+    const dataB = new Date(b.querySelector(".data").innerText.split("/").reverse().join("-"));
+    return ordem === "desc" ? dataB - dataA : dataA - dataB;
   });
 
-  // Aplicar filtros
-  aplicarBtn.addEventListener("click", aplicarFiltros);
+  // Reposicionar os links SEM quebrar o layout
+  const listaContainer = document.querySelector(".lista");
+  ordenados.forEach(link => listaContainer.appendChild(link));
 
+  // Fechar painel após aplicar
+  painelFiltro.style.display = "none";
+}
 
+// Ativar botões ao clicar
+document.querySelectorAll(".opcoes .opcao").forEach(btn => {
+  btn.addEventListener("click", () => {
+    btn.parentElement.querySelectorAll(".opcao").forEach(b => b.classList.remove("ativo"));
+    btn.classList.add("ativo");
+  });
+});
+
+// Limpar filtros
+limparBtn.addEventListener("click", () => {
+  document.querySelectorAll(".opcoes .opcao").forEach(b => b.classList.remove("ativo"));
+  lista.forEach(link => (link.style.display = "block"));
+});
+
+// Aplicar filtros
+aplicarBtn.addEventListener("click", aplicarFiltros);
 </script>
+
 </body>
 </html>

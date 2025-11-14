@@ -15,7 +15,7 @@ if (!$id_ideia) {
 }
 
 // Buscar os dados da ideia
-$sql = "SELECT nome, descricao, data_criacao 
+$sql = "SELECT nome, descricao, tempo_hora 
         FROM Ideia 
         WHERE id_ideia = ? AND id_usuario = ?";
 $stmt = $pdo->prepare($sql);
@@ -59,7 +59,7 @@ if (!$ideia) {
 <!-- Data -->
 <div class="date">
   <i class="far fa-calendar"></i>
-  <span>Criado em <?= date("d/m/Y", strtotime($ideia['data_criacao'])) ?></span>
+  <span>Criado em <?= date("d/m/Y H:i", strtotime($ideia['tempo_hora'])) ?></span>
 </div>
 
 <!-- Card Descrição -->
@@ -115,10 +115,12 @@ if (!$ideia) {
     </button>
 
  <!-- Botão Excluir Projeto -->
-    <button class="del-btn">
-    <i class="fa-solid fa-trash"></i>
+    <form action="deleteProjeto.php" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir este projeto?')">
+    <input type="hidden" name="id" value="<?= $id_ideia ?>">
+    <button class="del-btn" type="submit">
+        <i class="fa-solid fa-trash"></i>
     </button>
-  </div>
+</form>
 
   <script>
   const editBtn = document.getElementById("editar");
