@@ -63,15 +63,15 @@ if (!$ideia) {
         <span>Criado em <?= date("d/m/Y H:i", strtotime($ideia['tempo_hora'])) ?></span>
     </div>
 
-    <!-- 🔥 NOVO STATUS CENTRAL (AGORA AQUI ENTRE DATA E DESCRIÇÃO) -->
+    <!-- NOVO STATUS -->
     <div class="status-center">
         <button class="status-btn" id="statusToggle">
             Alterar Status <i class="fas fa-chevron-down"></i>
         </button>
 
         <div class="dropdown" id="dropdownMenu">
-            <span class="opt" data-value="Em andamento">Em andamento</span>
-            <span class="opt" data-value="Concluído">Concluído</span>
+            <span class="opt">Em andamento</span>
+            <span class="opt">Concluído</span>
         </div>
     </div>
 
@@ -103,10 +103,8 @@ if (!$ideia) {
         <i class="fas fa-chevron-right"></i>
     </div>
 
-    <!-- ADD -->
     <button class="add-btn"><i class="fas fa-plus"></i></button>
 
-    <!-- DELETE -->
     <form action="deleteProjeto.php" method="POST">
         <input type="hidden" name="id" value="<?= $id_ideia ?>">
         <button class="del-btn"><i class="fas fa-trash"></i></button>
@@ -116,8 +114,7 @@ if (!$ideia) {
 
 
 <script>
-
-// ===== DROPDOWN CENTRAL =====
+// ===== DROPDOWN =====
 const toggle = document.getElementById("statusToggle");
 const menu = document.getElementById("dropdownMenu");
 
@@ -132,7 +129,6 @@ document.querySelectorAll(".opt").forEach(opt => {
     });
 });
 
-// Fecha clicando fora
 document.addEventListener("click", (e) => {
     if (!toggle.contains(e.target) && !menu.contains(e.target)) {
         menu.classList.remove("show");

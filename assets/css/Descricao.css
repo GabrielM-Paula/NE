@@ -68,13 +68,14 @@ body {
   margin-top: 14px;
   margin-bottom: 20px;
   display: flex;
-  justify-content: center;
-  position: relative;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 
 .status-btn {
   width: 98%;
-  padding: 10px 12px;
+  padding: 14px;
   background: #ffffff;
   border: 2px solid #cbd5e1;
   border-radius: 12px;
@@ -85,13 +86,13 @@ body {
   cursor: pointer;
 }
 
+/* DROPDOWN AGORA EMPURRA CONTEÚDO */
 .dropdown {
   display: none;
-  position: absolute;
-  top: 105%;
-  width: 90%;
+  width: 98%;
   background: white;
-  border-radius: 10px;
+  border-radius: 12px;
+  margin-top: 8px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.12);
   overflow: hidden;
 }
@@ -111,7 +112,7 @@ body {
   background: #f1f5f9;
 }
 
-/* ===== DATE ===== */
+/* DATE */
 .date {
   display: flex;
   align-items: center;
@@ -120,7 +121,7 @@ body {
   color: #64748b;
 }
 
-/* ===== CARD ===== */
+/* CARD */
 .card {
   background: #fff;
   padding: 20px;
@@ -156,7 +157,7 @@ body {
 .save { background: #3b82f6; color: white; }
 .cancel { background: #e2e8f0; }
 
-/* ===== TOOLS ===== */
+/* TOOLS */
 .tool {
   display: flex;
   justify-content: space-between;
@@ -177,6 +178,7 @@ body {
   align-items: center;
 }
 
+/* ADD / DELETE BUTTONS */
 .add-btn, .del-btn {
   width: 100%;
   padding: 16px;
