@@ -57,7 +57,7 @@ $ideias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <!-- Abas Ativos/Arquivados -->
     <div class="abas-projetos">
-      <button class="aba ativa" data-aba="ativos">Ativos</button>
+      <button class="aba aba-ativa" data-aba="ativos">Ativos</button>
       <button class="aba" data-aba="arquivados">Arquivados</button>
     </div>
 
@@ -65,7 +65,7 @@ $ideias = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script src="https://unpkg.com/phosphor-icons"></script>
 
     <!-- Conteúdo da aba Ativos -->
-    <div id="conteudo-ativos" class="conteudo-aba ativa">
+    <div id="conteudo-ativos" class="conteudo-aba conteudo-ativo">
       <!-- Cabeçalho de Projetos Recentes com botão de filtro -->
       <div class="header-filtro">
         <h3>Projetos Recentes</h3>

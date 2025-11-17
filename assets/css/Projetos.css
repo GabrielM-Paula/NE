@@ -390,3 +390,54 @@ hr {
   transform: scale(1.1);
   color: #b91c1c;
 }
+/* ================================
+   ABAS ATIVOS/ARQUIVADOS
+================================== */
+.abas-projetos {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    background: #fff;
+    border-radius: 8px 8px 0 0;
+    overflow: hidden;
+}
+
+.aba {
+    flex: 1;
+    padding: 12px 16px;
+    cursor: pointer;
+    border: none;
+    background: #f8fafc;
+    font-size: 14px;
+    font-weight: 600;
+    color: #64748b;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.aba:hover {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+ .aba-ativa {
+    background: #fff;
+    color: #2563EB;
+    border-bottom: 2px solid #2563EB;
+}
+
+.conteudo-aba {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.conteudo-ativo  {
+    display: block;
+}
+
+/* Status para projetos arquivados */
+.status .arquivado {
+    background: #f3f4f6;
+    color: #6b7280;
+}
