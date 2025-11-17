@@ -55,65 +55,81 @@ $ideias = $stmt->fetchAll(PDO::FETCH_ASSOC);
       <button type="submit" class="btn" id="novoBtn">+ Novo Projeto</button>
     </form>
 
+    <!-- Abas Ativos/Arquivados -->
+    <div class="abas-projetos">
+      <button class="aba ativa" data-aba="ativos">Ativos</button>
+      <button class="aba" data-aba="arquivados">Arquivados</button>
+    </div>
+
     <!-- Importa os ícones do Phosphor -->
     <script src="https://unpkg.com/phosphor-icons"></script>
 
-    <!-- Cabeçalho de Projetos Recentes com botão de filtro -->
-    <div class="header-filtro">
-      <h3>Projetos Recentes</h3>
-      <button id="filtroBtn" class="filtro-icone" title="Filtrar projetos">
-        <i class="ph ph-funnel-simple"></i>
-      </button>
-    </div>
-
-    <!-- Painel de Filtro -->
-    <div id="painelFiltro" class="painel-filtro">
-      <h4>Filtros</h4>
-
-      <label>Status</label>
-      <div class="opcoes">
-        <button class="opcao" id="filtro-andamento" value="false">Em andamento</button>
-        <button class="opcao" id="filtro-concluido">Concluído</button>
+    <!-- Conteúdo da aba Ativos -->
+    <div id="conteudo-ativos" class="conteudo-aba ativa">
+      <!-- Cabeçalho de Projetos Recentes com botão de filtro -->
+      <div class="header-filtro">
+        <h3>Projetos Recentes</h3>
+        <button id="filtroBtn" class="filtro-icone" title="Filtrar projetos">
+          <i class="ph ph-funnel-simple"></i>
+        </button>
       </div>
 
-      <label>Data</label>
-      <div class="opcoes">
-        <button class="opcao" id="filtro-recente">↓ Mais Recente</button>
-        <button class="opcao" id="filtro-antigo">↑ Mais Antigo </button>
-      </div>
+      <!-- Painel de Filtro -->
+      <div id="painelFiltro" class="painel-filtro">
+        <h4>Filtros</h4>
 
-      <div class="acoes-filtro">
-        <button class="limpar">Limpar Filtros</button>
-        <button class="aplicar">Aplicar</button>
-      </div>
-    </div>
-    <br>
+        <label>Status</label>
+        <div class="opcoes">
+          <button class="opcao" id="filtro-andamento" value="false">Em andamento</button>
+          <button class="opcao" id="filtro-concluido">Concluído</button>
+        </div>
 
-    <!-- Lista de Projetos -->
-    <div class="lista">
-      <?php if (empty($ideias)): ?>
-        <p>Você ainda não criou nenhum projeto.</p>
-      <?php else: ?>
-        <?php foreach ($ideias as $ideia): ?>
-          <a href="Descricao.php?id=<?= $ideia['id_ideia'] ?>" style="text-decoration:none; color:inherit;">
-            <div class="card">
-              <div>
-                <p class="titulo"><?= htmlspecialchars($ideia['nome']) ?></p>
-                <div class="data-linha">
-                  <p class="data"><?= date("d/m/Y H:i", strtotime($ideia['tempo_hora'])) ?></p>
-                
+        <label>Data</label>
+        <div class="opcoes">
+          <button class="opcao" id="filtro-recente">↓ Mais Recente</button>
+          <button class="opcao" id="filtro-antigo">↑ Mais Antigo </button>
+        </div>
+
+        <div class="acoes-filtro">
+          <button class="limpar">Limpar Filtros</button>
+          <button class="aplicar">Aplicar</button>
+        </div>
+      </div>
+      <br>
+
+      <!-- Lista de Projetos Ativos -->
+      <div class="lista">
+        <?php if (empty($ideias)): ?>
+          <p>Você ainda não criou nenhum projeto.</p>
+        <?php else: ?>
+          <?php foreach ($ideias as $ideia): ?>
+            <a href="Descricao.php?id=<?= $ideia['id_ideia'] ?>" style="text-decoration:none; color:inherit;">
+              <div class="card">
+                <div>
+                  <p class="titulo"><?= htmlspecialchars($ideia['nome']) ?></p>
+                  <div class="data-linha">
+                    <p class="data"><?= date("d/m/Y H:i", strtotime($ideia['tempo_hora'])) ?></p>
+                  </div>
                 </div>
+                <span class="status em_progresso">Em andamento</span>
+                <div class="seta">›</div>
               </div>
-              <span class="status em_progresso">Em andamento</span>
-              <div class="seta">›</div>
-            </div>
-          </a>
-        <?php endforeach; ?>
-      <?php endif; ?>
+            </a>
+          <?php endforeach; ?>
+        <?php endif; ?>
+      </div>
+    </div>
+
+    <!-- Conteúdo da aba Arquivados -->
+    <div id="conteudo-arquivados" class="conteudo-aba">
+      <!-- Lista de Projetos Arquivados -->
+      <div class="lista">
+        <p>Projetos arquivados aparecerão aqui</p>
+      </div>
     </div>
   </main>
 
-  <!-- Script do filtro -->
+  <!-- Script do filtro (SEU AMIGO VAI MODIFICAR) -->
   <script>
 /* ===========================
       MODAL DO MENU
