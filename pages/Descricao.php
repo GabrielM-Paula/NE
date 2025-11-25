@@ -16,7 +16,7 @@ if (!$id_ideia) {
 
 // Buscar os dados da ideia
 $sql = "SELECT nome, descricao, tempo_hora 
-        FROM Ideia 
+        FROM ideia 
         WHERE id_ideia = ? AND id_usuario = ?";
 $stmt = $pdo->prepare($sql);
 $stmt->execute([$id_ideia, $id_usuario]);
@@ -138,7 +138,7 @@ document.querySelectorAll(".opt").forEach(opt => {
         fetch("updateStatus.php", {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: `id=<?= $id_ideia ?>&status=${valor}`
+            body: `id=<?= $id_ideia ?>&progresso=${valor}`
         })
         .then(r => r.text())
         .then(resp => {
