@@ -10,10 +10,21 @@ require_once '../includes/db_connection.php';
 $id_usuario = $_SESSION['user_id'];
 
 // Buscar ideias do usuário
-$sql = "SELECT * FROM Ideia WHERE id_usuario = ? ORDER BY tempo_hora DESC";
+$sql = "SELECT * FROM Ideia 
+        WHERE id_usuario = ? AND arquivado = 0 
+        ORDER BY tempo_hora DESC";
+
 $stmt = $pdo->prepare($sql);
 $stmt->execute([$id_usuario]);
 $ideias = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$sql2 = "SELECT * FROM ideia 
+         WHERE id_usuario = ? AND arquivado = 1 
+         ORDER BY tempo_hora DESC";
+$stmt2 = $pdo->prepare($sql2);
+$stmt2->execute([$id_usuario]);
+$arquivados = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -122,12 +133,27 @@ $ideias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <!-- Conteúdo da aba Arquivados -->
     <div id="conteudo-arquivados" class="conteudo-aba">
-      <!-- Lista de Projetos Arquivados -->
-      <div class="lista">
-        <p>Projetos arquivados aparecerão aqui</p>
-      </div>
-    </div>
-  </main>
+  <div class="lista">
+    <?php if (empty($arquivados)): ?>
+        <p>Nenhum projeto arquivado.</p>
+    <?php else: ?>
+        <?php foreach ($arquivados as $arq): ?>
+            <div class="card">
+                <div>
+                    <p class="titulo"><?= htmlspecialchars($arq['nome']) ?></p>
+                    <p class="data"><?= date("d/m/Y H:i", strtotime($arq['tempo_hora'])) ?></p>
+                </div>
+
+                <form action="desarquivarProjeto.php" method="POST">
+                    <input type="hidden" name="id" value="<?= $arq['id_ideia'] ?>">
+                    <button class="btn" style="padding:6px 12px;">Desarquivar</button>
+                </form>
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
+  </div>
+</div>
+
 
   <!-- Script do filtro (SEU AMIGO VAI MODIFICAR) -->
   <script>
@@ -225,6 +251,29 @@ limparBtn.addEventListener("click", () => {
 
 // Aplicar filtros
 aplicarBtn.addEventListener("click", aplicarFiltros);
+
+/* ==========================
+   TROCAR ENTRE ABAS
+========================== */
+
+const abas = document.querySelectorAll(".aba");
+const conteudos = document.querySelectorAll(".conteudo-aba");
+
+abas.forEach(aba => {
+    aba.addEventListener("click", () => {
+
+        // remover ativo de todas as abas
+        abas.forEach(a => a.classList.remove("aba-ativa"));
+        aba.classList.add("aba-ativa");
+
+        // esconder todos os conteúdos
+        conteudos.forEach(c => c.classList.remove("conteudo-ativo"));
+
+        // mostrar conteúdo correto
+        const alvo = aba.dataset.aba;
+        document.getElementById(`conteudo-${alvo}`).classList.add("conteudo-ativo");
+    });
+});
 </script>
 
 </body>

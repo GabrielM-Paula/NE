@@ -110,6 +110,12 @@ if (!$ideia) {
         <button class="del-btn"><i class="fas fa-trash"></i></button>
     </form>
 
+    <form action="arquivarProjeto.php" method="POST">
+    <input type="hidden" name="id" value="<?= $id_ideia ?>">
+    <button class="del-btn" style="background:#666;"><i class="fas fa-box-archive"></i></button>
+</form>
+
+
 </div>
 
 
@@ -124,8 +130,25 @@ toggle.addEventListener("click", () => {
 
 document.querySelectorAll(".opt").forEach(opt => {
     opt.addEventListener("click", () => {
-        toggle.innerHTML = opt.innerText + " <i class='fas fa-chevron-down'></i>";
-        menu.classList.remove("show");
+
+        let valor = opt.innerText === "Concluído"
+            ? "concluida"
+            : "em_progresso";
+
+        fetch("updateStatus.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: `id=<?= $id_ideia ?>&status=${valor}`
+        })
+        .then(r => r.text())
+        .then(resp => {
+            if (resp.trim() === "ok") {
+                toggle.innerHTML = opt.innerText + " <i class='fas fa-chevron-down'></i>";
+                menu.classList.remove("show");
+            } else {
+                alert("Erro ao atualizar status.");
+            }
+        });
     });
 });
 
